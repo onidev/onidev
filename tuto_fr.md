@@ -219,7 +219,25 @@ int main()
 }
 ```
 
-### Durée de vie d'une instace
+### Durée de vie d'une instance
+
+Une fois une instance crée, il est très simple de la détruire. Pour cela vous avez 2 méthodes:
+- instanceDestroy() qui va appeller l'event eventDestroyed() et détruire l'instance
+- instanceKill() qui va détruire l'instance sans appeller aucun event
+
+Si vous avez besoin de savoir si une instance existe toujours ou a été détruite, vous devez garder un std::weak_ptr d'elle:
+```c++
+std::weak_ptr<Object> ins = od::instanceCreateWeak<Object>();
+...
+ins.lock()->instanceDestroy();
+...
+if(!ins.expired())
+{
+    auto obj = ins.lock();
+    obj->foo();
+}
+```
+
 
 ### Détection des collisions
 
