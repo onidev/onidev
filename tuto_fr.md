@@ -170,8 +170,12 @@ public:
         static od::Rect rect(0, 0, 16, 16);
         return &rect;
     }
-    
-    void step(float dt) override;
+    void step(float dt) override {
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) pos.x -= dt;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) pos.x += dt;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) pos.y -= dt;
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) pos.y += dt;
+    }
     void draw(sf::RenderTarget& render_target) const override
     {
         sf::RectangleShape rectangle;
@@ -180,14 +184,6 @@ public:
         render_target.draw(rectangle);
     }
 };
-
-void Player::step(float dt)
-{
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) pos.x -= dt;
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) pos.x += dt;
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) pos.y -= dt;
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) pos.y += dt;
-}
 
 int main()
 {
