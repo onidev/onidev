@@ -239,34 +239,14 @@ void InstanceContext<T>::update(float delta_time)
 }
 
 template<class T>
-void InstanceContext<T>::render(bool call_predraw) const
+void InstanceContext<T>::render() const
 {
-    for(size_t n=0; n<_instances.instances.size(); ++n)
-    {
-        auto& t = _instances.instances[ _priority[n] ];
-        if(!t.empty())
-        {
-            if(call_predraw)
-            {
-                t.front()->predraw();
-            }
-            
-            for(const auto & ii: t)
-            {
-                ii->draw();
-            }
-            
-            if(call_predraw)
-            {
-                t.back()->postdraw();
-            }
-        }
-    }
+    render(true);
 }
 
 template<class T>
 template<class... Args>
-void InstanceContext<T>::renderArgs(bool call_predraw, Args&&... args) const
+void InstanceContext<T>::render(bool call_predraw, Args&&... args) const
 {
     for(size_t n=0; n<_instances.instances.size(); ++n)
     {
@@ -292,7 +272,14 @@ void InstanceContext<T>::renderArgs(bool call_predraw, Args&&... args) const
 }
 
 template<class T>
-void InstanceContext<T>::render(size_t object, bool call_predraw) const
+void InstanceContext<T>::renderObject(size_t object) const
+{
+    render(object, true);
+}
+
+template<class T>
+template<class... Args>
+void InstanceContext<T>::renderObject(size_t object, bool call_predraw, Args&&... args) const
 {
     assert( object < _instances.instances.size() );
     const auto& t = _instances.instances[object];
@@ -305,7 +292,7 @@ void InstanceContext<T>::render(size_t object, bool call_predraw) const
         
         for(const auto & ii: t)
         {
-            ii->draw();
+            ii->draw(std::forward<Args>(args)...);
         }
         
         if(call_predraw)
@@ -315,8 +302,16 @@ void InstanceContext<T>::render(size_t object, bool call_predraw) const
     }
 }
 
+
 template<class T>
-void InstanceContext<T>::renderLayers(int priority_min, int priority_max, bool call_predraw)
+void InstanceContext<T>::renderLayers(int priority_min, int priority_max) const
+{
+    renderLayers(priority_min, priority_max, true);
+}
+
+template<class T>
+template<class... Args>
+void InstanceContext<T>::renderLayers(int priority_min, int priority_max, bool call_predraw, Args&&... args) const
 {
     // 1) search for priority indexes
     int min_index = -1;
@@ -325,7 +320,6 @@ void InstanceContext<T>::renderLayers(int priority_min, int priority_max, bool c
     for(size_t n=0; n<_instances.instances.size(); ++n)
     {
         int p = _object_priority[ _priority[n] ];
-        //printf("%d ", p);
         
         if(min_index == -1 && p >= priority_min)
             min_index = n;
@@ -338,7 +332,6 @@ void InstanceContext<T>::renderLayers(int priority_min, int priority_max, bool c
         return;
     
     // 2) render
-    //printf("\n(%d %d)=>[%d %d]\n", priority_min, priority_max, min_index, max_index);
     for(size_t n=min_index; n<=max_index; ++n)
     {
         auto& t = _instances.instances[ _priority[n] ];
@@ -351,7 +344,7 @@ void InstanceContext<T>::renderLayers(int priority_min, int priority_max, bool c
             
             for(const auto & ii: t)
             {
-                ii->draw();
+                ii->draw(std::forward<Args>(args)...);
             }
             
             if(call_predraw)

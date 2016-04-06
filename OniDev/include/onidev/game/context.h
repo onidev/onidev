@@ -63,12 +63,18 @@ public:
     const std::vector<int>& renderPriority() const { return _priority; }
     
     void update(float deltaTime);
-    void render(bool call_predraw = true) const;
-    void render(size_t object, bool call_predraw = true) const;
-    void renderLayers(int priority_min, int priority_max, bool call_predraw = true);
+    void render() const;
+    void renderObject(size_t object) const;
+    void renderLayers(int priority_min, int priority_max) const;
     
     template<class... Args>
-    void renderArgs(bool call_predraw, Args&&... args) const;
+    void render(bool call_predraw, Args&&... args) const;
+    
+    template<class... Args>
+    void renderObject(size_t object, bool call_predraw, Args&&... args) const;
+    
+    template<class... Args>
+    void renderLayers(int priority_min, int priority_max, bool call_predraw, Args&&... args) const;
     
     template<class Object, class Partitioning, class...Args>
     void setSpacePartitioning(Args&&... args);
