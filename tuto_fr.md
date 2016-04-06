@@ -219,6 +219,8 @@ int main()
 }
 ```
 
+### Durée de vie d'une instace
+
 ### Détection des collisions
 
 Une fois vos entités implémentées, et que vous leur avez définis un masque de collision, vous pouvez très facilement les faire interagir entre elles. Plusieurs fonctions permettent de detecter simplement s'il y a collision entre une instance et une autre.
@@ -236,6 +238,17 @@ Exemple 2 - Detecter s'il y a collision avec une instance de plusieurs types d'o
 if(keyCheck(vk_right) && !placeMeeting<Block, Ground, Wall>(pos.x+1, pos.y))
 {
     pos.x++;
+}
+```
+
+Exemple 3 - Obtenir un pointeur de l'instance en collision
+```c++
+od::Object2d* ins = instancePosition<Bonus>(pos.x, pos.y);
+if(ins)
+{
+    Bonus* bonus = static_cast<Bonus*>(ins);
+    getPoints(bonus->points());
+    bonus->instanceDestroy();
 }
 ```
 
