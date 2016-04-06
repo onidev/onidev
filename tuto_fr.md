@@ -9,6 +9,7 @@ L'instance manager permet de:
 - permettre de partitionner l'espace pour optimiser la detection des collisions
 - permettre de gérer des collisions entre instances et calques de collision
 
+
 ### Creation d'un contexte d'instance
 
 Un contexte d'instances contiendra les instances crées après qu'il ai été définis
@@ -56,6 +57,7 @@ while(mainLoop())
     ic.render();
 }
 ```
+
 
 ### Implementation d'entités
 
@@ -130,6 +132,7 @@ public:
     }
 };
 ```
+
 
 ### Implementation d'un type d'entité custom
 
@@ -219,6 +222,7 @@ int main()
 }
 ```
 
+
 ### Durée de vie d'une instance
 
 Une fois une instance crée, il est très simple de la détruire. Pour cela vous avez 2 méthodes:
@@ -237,6 +241,17 @@ if(!ins.expired())
     obj->foo();
 }
 ```
+
+Vous pouvez obtenir un std::weak_ptr<T> depuis un T*, pour cela vous devrez utiliser la methode shared():
+```c++
+void Foo::bar(Enemy* obj)
+{
+    _target = obj->shared();
+}
+```
+
+Attention cependant a ne pas abuser de cette méthode, qui a une complexité linéaire en fonction du nombre d'instances
+de l'objet.
 
 
 ### Détection des collisions
@@ -269,6 +284,7 @@ if(ins)
     bonus->instanceDestroy();
 }
 ```
+
 
 ### Partitionnement de l'espace
 
