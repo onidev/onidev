@@ -81,7 +81,7 @@ od::AutoIndex attends 3 paramètres templates dont 1 facultatif:
 - Le type de l'objet dérivé
 - Un entier qui définis la priorité d'affichage de l'objet
 
-Ainsi pour dériver un objet vous devez proceder comme il suit:
+Ainsi pour dériver un objet vous devez proceder ainsi:
 ```c++
 class EntityBase:
     public od::AutoIndex<od::Object2d, EntityBase>
@@ -97,5 +97,36 @@ class Entity:
 public:
     Entity(float x, float y):
         od::AutoIndex<EntityBase, Entity>(x, y) {}
+};
+```
+
+De nombreuses methodes peut être redéfinies, les plus importantes étants:
+- collisionMask() qui définis le masque de collision de l'instance
+- step() qui sera appellé par InstanceContexte::update()
+- draw() qui sera appellé par InstanceContexte::render()
+
+Voici un exemple complet:
+```c++
+class Player:
+    public od::AutoIndex<od::Object2d, Player, 10>
+{
+public:
+    Player(float x, float y):
+        od::AutoIndex<od::Object2d, Player, 10>(x, y) {}
+    
+    od::Shape * collisionMask(int p) const override {
+        static od::Rect rect(0, 0, 16, 16);
+        return &rect;
+    }
+    void step(float dt) override {
+        if(od::keyCheck(od::vk_left)) pos.x -= dt;
+        if(od::keyCheck(od::vk_right)) pos.x += dt;
+        if(od::keyCheck(od::vk_up)) pos.y -= dt;
+        if(od::keyCheck(od::vk_down)) pos.y += dt;
+    }
+    void draw() const override {
+        glColor3f(1, 1, 1); 
+        od::drawRectangle(pos.x, pos.y, pos.x+16, pos.y+16);
+    }
 };
 ```
