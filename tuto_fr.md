@@ -2,19 +2,19 @@
 ## Utilisation de l'instance manager
 
 L'instance manager permet de:
-- contenir des instances d'objets differents qui dérivent du même objet
+- contenir des instances d'objets différents qui dérivent du même objet
 - lancer leur event d'update et d'affichage dans la boucle principale automatiquement
 - obtenir des informations sur les instances, savoir si une instance existe
 - gérer les collisions entre instances
-- permettre de partitionner l'espace pour optimiser la detection des collisions
+- permettre de partitionner l'espace pour optimiser la détection des collisions
 - permettre de gérer des collisions entre instances et calques de collision
 
 
-### Creation d'un contexte d'instance
+### Création d'un contexte d'instance
 
-Un contexte d'instances contiendra les instances crées après qu'il ai été définis
+Un contexte d'instances contiendra les instances créées après qu'il ait été défini
 comme le contexte global.
-A sa création un contexte est automatiquement passé comme contexte global.
+À sa création un contexte est automatiquement passé comme contexte global.
 
 ```c++
 od::InstanceContext<Object> ic;
@@ -24,8 +24,8 @@ od::instanceCreate<Foo>();
 Utiliser plusieurs contextes est rarement utile, mais cela permet de faire tourner
 plusieurs "mondes" en parallèle sans que les instances de chacun d'eux n'influent
 sur celles des autres.
-Cela peut être pratique pour faire un mini jeu dans un jeu, ou un jeu
-qui se joue dans plusieurs dimensions simultannément par exemple.
+Cela peut être pratique pour faire un mini-jeu dans un jeu, ou un jeu
+qui se joue dans plusieurs dimensions simultanément par exemple.
 
 ```c++
 od::InstanceContext<Object> context1;
@@ -39,14 +39,14 @@ context2.setGlobal();
 od::instanceCreate<Bar>();
 ```
 
-Si vous ne créez pas de contexte, un contexte par defaut sera accessible.
-Vous pourrez y accèder avec:
+Si vous ne créez pas de contexte, un contexte par défaut sera accessible.
+Vous pourrez y accéder avec:
 
 ```c++
 auto& context = od::InstanceContext<Object>::getDefault();
 ```
 
-Une fois le contexte crée vous pouvez donc update les instances qu'il contient, et les afficher.
+Une fois le contexte créé vous pouvez donc update les instances qu'il contient, et les afficher.
 ```c++
 od::InstanceContext<Object> ic;
 od::instanceCreate<Foo>();
@@ -61,12 +61,12 @@ while(mainLoop())
 
 ### Implementation d'entités
 
-Lorsque vous implementez une entité, vous devez la faire dériver soit:
+Lorsque vous implémentez une entité, vous devez la faire dériver soit:
 - de od::Object2d 
 - de od::GenericObject2d<T> si od::Object2d ne vous conviens pas en tant que tel
 
 Chaque entité doit posséder un identifiant unique. Le faire manuellement étant une tache très contraignante, il existe
-une classe prévue a cet effet.
+une classe prévue à cet effet.
 
 ```c++
 class Entity:
@@ -78,12 +78,12 @@ public:
 };
 ```
 
-od::AutoIndex attends 3 paramètres templates dont 1 facultatif:
+od::AutoIndex attend 3 paramètres templates dont 1 facultatif:
 - Le type dont on doit dériver
 - Le type de l'objet dérivé
-- Un entier qui définis la priorité d'affichage de l'objet
+- Un entier qui définit la priorité d'affichage de l'objet
 
-Ainsi pour dériver un objet vous devez proceder ainsi:
+Ainsi pour dériver un objet vous devez procéder ainsi:
 ```c++
 class EntityBase:
     public od::AutoIndex<od::Object2d, EntityBase>
@@ -102,7 +102,7 @@ public:
 };
 ```
 
-De nombreuses methodes peut être redéfinies, les plus importantes étants:
+De nombreuses méthodes peuvent être redéfinies, les plus importantes étant:
 - collisionMask() qui définis le masque de collision de l'instance
 - step() qui sera appellé par InstanceContexte::update()
 - draw() qui sera appellé par InstanceContexte::render()
@@ -136,7 +136,7 @@ public:
 
 ### Implementation d'un type d'entité custom
 
-Dans certains cas il peut être necessaire d'implementer un type custom d'entité, par exemple si vous souhaitez intégrer de nouveaux events ou methodes virtuelles. Il est aussi possible de créer un event draw qui prend des paramètres customs, cela peut être très utile pour certaines bibliothèques qui ont besoin d'un accès a un RenderTarget.
+Dans certains cas il peut être nécessaire d'implementer un type custom d'entité, par exemple si vous souhaitez intégrer de nouveaux events ou méthodes virtuelles. Il est aussi possible de créer un event draw qui prend des paramètres customs, cela peut être très utile pour certaines bibliothèques qui ont besoin d'un accès à un RenderTarget.
 
 Pour cela il suffit juste de faire dériver votre classe de base de od::GenericObject2d<T> comme suit:
 ```c++
@@ -160,7 +160,7 @@ GlobalCounter est nécessaire pour le fonctionnement de od::AutoIndex. N'oubliez
 size_t sfObject::GlobalCounter = 0;
 ```
 
-Vous pouvez desormais utiliser sfObject comme classe de base pour toutes vos entités:
+Vous pouvez désormais utiliser sfObject comme classe de base pour toutes vos entités:
 ```c++
 class Player:
     public od::AutoIndex<sfObject, Player>
@@ -225,9 +225,9 @@ int main()
 
 ### Durée de vie d'une instance
 
-Une fois une instance crée, il est très simple de la détruire. Pour cela vous avez 2 méthodes:
-- instanceDestroy() qui va appeller l'event eventDestroyed() et détruire l'instance
-- instanceKill() qui va détruire l'instance sans appeller aucun event
+Une fois une instance créée, il est très simple de la détruire. Pour cela vous avez 2 méthodes:
+- instanceDestroy() qui va appeler l'event eventDestroyed() et détruire l'instance
+- instanceKill() qui va détruire l'instance sans appeler aucun event
 
 Si vous avez besoin de savoir si une instance existe toujours ou a été détruite, vous devez garder un std::weak_ptr d'elle:
 ```c++
@@ -242,7 +242,7 @@ if(!ins.expired())
 }
 ```
 
-Vous pouvez obtenir un std::weak_ptr depuis un Object*, pour cela vous devrez utiliser la methode shared():
+Vous pouvez obtenir un std::weak_ptr depuis un Object*, pour cela vous devrez utiliser la méthode shared():
 ```c++
 void Foo::bar(Enemy* obj)
 {
@@ -250,15 +250,15 @@ void Foo::bar(Enemy* obj)
 }
 ```
 
-Attention cependant a ne pas abuser de cette méthode, qui a une complexité linéaire en fonction du nombre d'instances
+Attention cependant à ne pas abuser de cette méthode, qui a une complexité linéaire en fonction du nombre d'instances
 de l'objet.
 
 
 ### Détection des collisions
 
-Une fois vos entités implémentées, et que vous leur avez définis un masque de collision, vous pouvez très facilement les faire interagir entre elles. Plusieurs fonctions permettent de detecter simplement s'il y a collision entre une instance et une autre.
+Une fois vos entités implémentées, et que vous leur avez définis un masque de collision, vous pouvez très facilement les faire interagir entre elles. Plusieurs fonctions permettent de détecter simplement s'il y a collision entre une instance et une autre.
 
-Exemple 1 - Detecter s'il y a collision avec une instance d'un objet particulier:
+Exemple 1 - Détecter s'il y a collision avec une instance d'un objet particulier:
 ```c++
 if(keyCheck(vk_right) && !placeMeeting<Block>(pos.x+1, pos.y))
 {
@@ -266,7 +266,7 @@ if(keyCheck(vk_right) && !placeMeeting<Block>(pos.x+1, pos.y))
 }
 ```
 
-Exemple 2 - Detecter s'il y a collision avec une instance de plusieurs types d'objets
+Exemple 2 - Détecter s'il y a collision avec une instance de plusieurs types d'objets
 ```c++
 if(keyCheck(vk_right) && !placeMeeting<Block, Ground, Wall>(pos.x+1, pos.y))
 {
@@ -288,24 +288,24 @@ if(ins)
 
 ### Partitionnement de l'espace
 
-Vous pouvez facilement assigner un système de partitionnement de l'espace a un type d'objet:
+Vous pouvez facilement assigner un système de partitionnement de l'espace à un type d'objet:
 ```c++
 od::InstanceContext<od::Object2d> ic;
 ic.setSpacePartitioning<Block, od::CollisionGrid>(128, 128, world_width/128+1, world_height/128+1);
 ```
 
-Les objets seront automatiquement ajoutés au systeme de partitionnement a leur création, et supprimés de celui ci a leur destruction.
+Les objets seront automatiquement ajoutés au système de partitionnement à leur création, et supprimés de celui-ci a leur destruction.
 Attention cependant, si vous bougez une instance, vous devrez l'update manuellement dans ce dernier.
 Il est surtout conseillé d'utiliser un système de partitionnement pour les objets statiques, afin de profiter au maximum des optimisations apportées.
 
 
 ### Priorités d'affichage et calques de rendu
 
-Vous pouvez assigner a chaque object (a ne pas confondre avec instance) une priorité d'affichage.
-Cette priorité est aussi appellée calque, car il va être possible d'afficher des objets d'un certain calque, ou encore d'un calque a un autre. Cela permet de gérer le rendu d'une manière un peu plus manuelle, et peut être pratique pour facilement gérer la profondeur d'affichage de divers objets.
+Vous pouvez assigner à chaque object (à ne pas confondre avec instance) une priorité d'affichage.
+Cette priorité est aussi appelée calque, car il va être possible d'afficher des objets d'un certain calque, ou encore d'un calque a un autre. Cela permet de gérer le rendu d'une manière un peu plus manuelle, et peut être pratique pour facilement gérer la profondeur d'affichage de divers objets.
 Vous ne pourrez par contre pas gérer la priorité d'affichage de manière locale (pour chaque instance) avec ce système.
 
-Exemple - afficher les instances d'un intervalle entre un calque et un autre
+Exemple - afficher les instances d'un intervalle entre un calque et un autre:
 ```c++
 ic.renderLayers(5, 10);
 ```
