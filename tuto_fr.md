@@ -190,7 +190,7 @@ int main()
     sf::ContextSettings contextSettings;
     contextSettings.depthBits = 24;
     
-    sf::RenderWindow window(sf::VideoMode(640, 480), "Instance Context Example", sf::Style::Close, contextSettings);
+    sf::RenderWindow window(sf::VideoMode(640, 480), "Project", sf::Style::Close, contextSettings);
     window.setVerticalSyncEnabled(true);
     window.setActive();
     
@@ -220,6 +220,24 @@ int main()
 ```
 
 ### Détection des collisions
+
+Une fois vos entités implémentées, et que vous leur avez définis un masque de collision, vous pouvez très facilement les faire interagir entre elles. Plusieurs fonctions permettent de detecter simplement s'il y a collision entre une instance et une autre.
+
+Exemple 1 - Detecter s'il y a collision avec une instance d'un objet particulier:
+```c++
+if(keyCheck(vk_right) && !placeMeeting<Block>(pos.x+1, pos.y))
+{
+    pos.x++;
+}
+```
+
+Exemple 2 - Detecter s'il y a collision avec une instance de plusieurs types d'objets
+```c++
+if(keyCheck(vk_right) && !placeMeeting<Block, Ground, Wall>(pos.x+1, pos.y))
+{
+    pos.x++;
+}
+```
 
 ### Partitionnement de l'espace
 
