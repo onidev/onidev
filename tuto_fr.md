@@ -218,3 +218,13 @@ int main()
     return 0;
 }
 ```
+
+### Détection des collisions
+
+### Partitionnement de l'espace
+
+### Priorités d'affichage et calques de rendu
+
+
+
+
