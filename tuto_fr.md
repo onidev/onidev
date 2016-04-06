@@ -11,7 +11,7 @@ L'instance manager permet de:
 
 ### Creation d'un contexte d'instance
 
-Un contexte d'instances contiendras les instances crées après qu'il ai été définis
+Un contexte d'instances contiendra les instances crées après qu'il ai été définis
 comme le contexte global.
 A sa création un contexte est automatiquement passé comme contexte global.
 
@@ -39,8 +39,63 @@ od::instanceCreate<Bar>();
 ```
 
 Si vous ne créez pas de contexte, un contexte par defaut sera accessible.
-Vous pourrez y accèder avec
+Vous pourrez y accèder avec:
 
 ```c++
 auto& context = od::InstanceContext<Object>::getDefault();
+```
+
+Une fois le contexte crée vous pouvez donc update les instances qu'il contient, et les afficher.
+```c++
+od::InstanceContext<Object> ic;
+od::instanceCreate<Foo>();
+
+while(mainLoop())
+{
+    ic.update( deltaTime() );
+    ic.render();
+}
+```
+
+### Implementation d'entités
+
+Lorsque vous implementez une entité, vous devez la faire dériver soit:
+- de od::Object2d 
+- de od::GenericObject2d<T> si od::Object2d ne vous conviens pas en tant que tel
+
+Chaque entité doit posséder un identifiant unique. Le faire manuellement étant une tache très contraignante, il existe
+une classe prévue a cet effet.
+
+```c++
+class Entity:
+    public od::AutoIndex<od::Object2d, Entity>
+{
+public:
+    Entity(float x, float y):
+        od::AutoIndex<od::Object2d, Entity>(x, y) {}
+};
+```
+
+od::AutoIndex attends 3 paramètres templates dont 1 facultatif:
+- Le type dont on doit dériver
+- Le type de l'objet dérivé
+- Un entier qui définis la priorité d'affichage de l'objet
+
+Ainsi pour dériver un objet vous devez proceder comme il suit:
+```c++
+class EntityBase:
+    public od::AutoIndex<od::Object2d, EntityBase>
+{
+public:
+    EntityBase(float x, float y):
+        od::AutoIndex<od::Object2d, EntityBase>(x, y) {}
+};
+
+class Entity:
+    public od::AutoIndex<EntityBase, Entity>
+{
+public:
+    Entity(float x, float y):
+        od::AutoIndex<EntityBase, Entity>(x, y) {}
+};
 ```
