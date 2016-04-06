@@ -242,7 +242,7 @@ if(!ins.expired())
 }
 ```
 
-Vous pouvez obtenir un std::weak_ptr<T> depuis un T*, pour cela vous devrez utiliser la methode shared():
+Vous pouvez obtenir un std::weak_ptr depuis un Object*, pour cela vous devrez utiliser la methode shared():
 ```c++
 void Foo::bar(Enemy* obj)
 {
@@ -288,8 +288,25 @@ if(ins)
 
 ### Partitionnement de l'espace
 
+Vous pouvez facilement assigner un système de partitionnement de l'espace a un type d'objet:
+```c++
+od::InstanceContext<od::Object2d> ic;
+ic.setSpacePartitioning<Block, od::CollisionGrid>(128, 128, world_width/128+1, world_height/128+1);
+```
+
+Les objets seront automatiquement ajoutés au systeme de partitionnement a leur création, et supprimés de celui ci a leur destruction.
+Attention cependant, si vous bougez une instance, vous devrez l'update manuellement dans ce dernier.
+Il est surtout conseillé d'utiliser un système de partitionnement pour les objets statiques, afin de profiter au maximum des optimisations apportées.
+
+
 ### Priorités d'affichage et calques de rendu
 
+Vous pouvez assigner a chaque object (a ne pas confondre avec instance) une priorité d'affichage.
+Cette priorité est aussi appellée calque, car il va être possible d'afficher des objets d'un certain calque, ou encore d'un calque a un autre. Cela permet de gérer le rendu d'une manière un peu plus manuelle, et peut être pratique pour facilement gérer la profondeur d'affichage de divers objets.
+Vous ne pourrez par contre pas gérer la priorité d'affichage de manière locale (pour chaque instance) avec ce système.
 
-
+Exemple - afficher les instances d'un intervalle entre un calque et un autre
+```c++
+ic.renderLayers(5, 10);
+```
 
