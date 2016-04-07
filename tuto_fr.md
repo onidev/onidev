@@ -6,8 +6,8 @@ L'instance manager permet de:
 - lancer leur event d'update et d'affichage dans la boucle principale automatiquement
 - obtenir des informations sur les instances, savoir si une instance existe
 - gérer les collisions entre instances
-- permettre de partitionner l'espace pour optimiser la détection des collisions
-- permettre de gérer des collisions entre instances et calques de collision
+- partitionner l'espace pour optimiser la détection des collisions
+- gérer des collisions entre instances et calques de collision
 
 
 ### Création d'un contexte d'instance
