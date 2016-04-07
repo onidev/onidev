@@ -316,10 +316,23 @@ Si vous utilisez render() sans rien spécifier, les instances seront automatique
 Vous pouvez afficher aussi les instances entre une priorité et une autre. Cela permet de gérer le rendu d'une manière un peu plus manuelle, et peut être pratique pour facilement gérer la profondeur d'affichage de divers objets.
 Vous ne pourrez par contre pas gérer la priorité d'affichage de manière locale (pour chaque instance) avec ce système.
 
-Exemple - afficher les instances d'un intervalle entre une priorité/calque et une autre:
+Exemple - Spécifier la priorité d'affichage de l'objet Entity:
+```c++
+class Entity:
+    public od::AutoIndex<od::Object2d, Entity, 10>
+{
+public:
+    Entity(float x, float y):
+        od::AutoIndex<od::Object2d, Entity>(x, y) {}
+};
+```
+
+Exemple - Afficher les instances d'un intervalle entre une priorité/calque et une autre:
 ```c++
 ic.renderLayers(5, 10);
 ```
+
+Nb: plus la priorité est haute, plus l'objet sera affiché par-dessus les autres.
 
 ### Utilisation des UID
 
