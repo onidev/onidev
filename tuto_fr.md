@@ -366,7 +366,7 @@ if(message == NetMessage::CreateEntity)
 }
 ```
 
-Ainsi vous pourrez facilement identifier cette instance a travers le réseau.
+Ainsi vous pourrez facilement identifier cette instance à travers le réseau.
 
 Server:
 ```c++
