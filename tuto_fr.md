@@ -307,16 +307,46 @@ for(Block* ii: t)
 }
 ```
 
-Cela peut être très pratique pour n'afficher que les instances présentes dans la view par exemple, sans avoir à traiter toutes les instances.
+Cela peut être très pratique pour n'afficher que les instances présentes dans la view par exemple, sans avoir à traiter toutes les instances du contexte.
 
 ### Priorités d'affichage et calques de rendu
 
 Vous pouvez assigner à chaque object (à ne pas confondre avec instance) une priorité d'affichage.
-Cette priorité est aussi appelée calque, car il va être possible d'afficher des objets d'un certain calque, ou encore d'un calque a un autre. Cela permet de gérer le rendu d'une manière un peu plus manuelle, et peut être pratique pour facilement gérer la profondeur d'affichage de divers objets.
+Si vous utilisez render() sans rien spécifier, les instances seront automatiquement affichées par ordre de priorité.
+Vous pouvez afficher aussi les instances entre une priorité et une autre. Cela permet de gérer le rendu d'une manière un peu plus manuelle, et peut être pratique pour facilement gérer la profondeur d'affichage de divers objets.
 Vous ne pourrez par contre pas gérer la priorité d'affichage de manière locale (pour chaque instance) avec ce système.
 
-Exemple - afficher les instances d'un intervalle entre un calque et un autre:
+Exemple - afficher les instances d'un intervalle entre une priorité/calque et une autre:
 ```c++
 ic.renderLayers(5, 10);
 ```
+
+### Utilisation des UID
+
+Les UID ou Unique Id sont très utiles quand vous devez porter votre jeu en réseau, pour identifier facilement des instances d'un client distant, et les synchroniser au server.
+
+Par défaut les UID sont désactivés pour tous les objets. Pour activer le système d'UID d'un objet vous devez réimplementer les 3 méthodes suivantes:
+- generateUid() qui permet d'indiquer si on utilise le système d'UID
+- setUid() pour assigner l'UID de l'instance
+- uid() pour obtenir l'UID de l'instance
+
+Voici un exemple d'entité qui utilise le système d'UID:
+```c++
+class Entity:
+    public od::AutoIndex<od::Object2d, Entity>
+{
+    unsigned _uid = 0;
+public:
+    Entity(float x, float y):
+        od::AutoIndex<od::Object2d, Entity>(x, y) {}
+    
+    bool generateUid() const override { return true; }
+    void setUid(unsigned uid) override { _uid = uid; }
+    unsigned uid() const { return _uid; }
+};
+```
+
+
+
+
 
