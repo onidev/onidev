@@ -346,8 +346,9 @@ public:
 };
 ```
 
-Si vous créez une instance côté serveur, vous devez envoyer son UID a travers le réseau pour ensuite créer la même instance côté client (ce qui implique de créer une instance avec le même UID).
+Si vous créez une instance côté serveur, vous devez envoyer son UID à travers le réseau pour ensuite créer la même instance côté client (ce qui implique de créer une instance avec le même UID).
 Voici comment procéder.
+
 Serveur:
 ```c++
 Entity* ins = od::instanceCreate<Entity>();
@@ -366,6 +367,7 @@ if(message == NetMessage::CreateEntity)
 ```
 
 Ainsi vous pourrez facilement identifier cette instance a travers le réseau.
+
 Server:
 ```c++
 Packet net_packet;
