@@ -237,8 +237,7 @@ ins.lock()->instanceDestroy();
 ...
 if(!ins.expired())
 {
-    auto obj = ins.lock();
-    obj->foo();
+    ins.lock()->foo();
 }
 ```
 
