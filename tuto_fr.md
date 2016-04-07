@@ -297,6 +297,17 @@ Les objets seront automatiquement ajoutés au système de partitionnement à leu
 Attention cependant, si vous bougez une instance, vous devrez l'update manuellement dans ce dernier.
 Il est surtout conseillé d'utiliser un système de partitionnement pour les objets statiques, afin de profiter au maximum des optimisations apportées.
 
+Une fois le système de partitionnement établi pour un objet, les fonctions de collisions l'utiliseront automatiquement sans que vous n'ailliez rien à faire.
+Vous pouvez aussi récupérer les instances dans une certaine zone facilement grâce à:
+```c++
+auto t = ic.retrieveInstances<Block>(x1, y1, x2, y2, od::CollisionGrid::Intersection);
+for(Block* ii: t)
+{
+    ii->foo();
+}
+```
+
+Cela peut être très pratique pour n'afficher que les instances présentes dans la view par exemple, sans avoir à traiter toutes les instances.
 
 ### Priorités d'affichage et calques de rendu
 
