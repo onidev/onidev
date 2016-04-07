@@ -323,7 +323,7 @@ ic.renderLayers(5, 10);
 
 ### Utilisation des UID
 
-Les UID ou Unique Id sont très utiles quand vous devez porter votre jeu en réseau, pour identifier facilement des instances d'un client distant, et les synchroniser au server.
+Les UID ou Unique Id sont très utiles quand vous devez porter votre jeu en réseau, pour identifier facilement des instances d'un client distant, et les synchroniser au serveur.
 
 Par défaut les UID sont désactivés pour tous les objets. Pour activer le système d'UID d'un objet vous devez réimplementer les 3 méthodes suivantes:
 - generateUid() qui permet d'indiquer si on utilise le système d'UID
@@ -346,7 +346,45 @@ public:
 };
 ```
 
+Si vous créez une instance côté serveur, vous devez envoyer son UID a travers le réseau pour ensuite créer la même instance côté client (ce qui implique de créer une instance avec le même UID).
+Voici comment procéder.
+Serveur:
+```c++
+Entity* ins = od::instanceCreate<Entity>();
+Packet net_packet;
+net_packet << NetMessage::CreateEntity << ins->uid();
+client.sendPacket(net_packet);
+```
+Client:
+```c++
+if(message == NetMessage::CreateEntity)
+{
+    unsigned uid;
+    net_packet >> uid;
+    od::instanceCreateUid<Entity>(uid);
+}
+```
 
+Ainsi vous pourrez facilement identifier cette instance a travers le réseau.
+Server:
+```c++
+Packet net_packet;
+net_packet << NetMessage::UpdateEntity << ins->uid();
+ins->evSend(net_packet);
+client.sendPacket(net_packet);
+```
 
-
+Client:
+```c++
+if(message == NetMessage::UpdateEntity)
+{
+    unsigned uid;
+    net_packet >> uid;
+    od::Object2d* ins = ic.find(Entity::ObjectIndex, uid);
+    if(ins)
+    {
+        ins->evReceive(net_packet);
+    }
+}
+```
 
