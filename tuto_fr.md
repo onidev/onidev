@@ -336,7 +336,7 @@ Nb: plus la priorité est haute, plus l'objet sera affiché par-dessus les autre
 
 ### Utilisation des UID
 
-Les UID ou Unique Id sont très utiles quand vous devez porter votre jeu en réseau, pour identifier facilement des instances d'un client distant, et les synchroniser au serveur.
+Les UID ou Unique Identifier sont très utiles quand vous devez porter votre jeu en réseau, pour identifier facilement des instances d'un client distant, et les synchroniser au serveur.
 
 Par défaut les UID sont désactivés pour tous les objets. Pour activer le système d'UID d'un objet vous devez réimplementer les 3 méthodes suivantes:
 - generateUid() qui permet d'indiquer si on utilise le système d'UID
