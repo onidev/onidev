@@ -104,8 +104,8 @@ public:
 
 De nombreuses méthodes peuvent être redéfinies, les plus importantes étant:
 - collisionMask() qui définis le masque de collision de l'instance
-- step() qui sera appellé par InstanceContexte::update()
-- draw() qui sera appellé par InstanceContexte::render()
+- step() qui sera appellé par InstanceContext::update()
+- draw() qui sera appellé par InstanceContext::render()
 
 Voici un exemple complet:
 ```c++
